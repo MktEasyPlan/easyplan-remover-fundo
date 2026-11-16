@@ -72,7 +72,9 @@ def recortar(imagem: Image.Image) -> bytes:
     resultado = imagem.convert("RGBA")
     resultado.putalpha(mascara)
     buffer = io.BytesIO()
-    resultado.save(buffer, format="PNG", optimize=True)
+    # Sem optimize=True: no processador do plano grátis ele custava ~25% do tempo
+    # para deixar o arquivo só ~5% menor.
+    resultado.save(buffer, format="PNG", compress_level=6)
     return buffer.getvalue()
 
 
